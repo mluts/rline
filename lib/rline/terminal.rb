@@ -18,7 +18,7 @@ class RLine
     end
 
     def print(*args)
-      @output.print(*args)
+      args.each { |arg| @output.write(arg) }
     end
   end
 end

@@ -14,8 +14,8 @@ class RLine
         clear
         smir
         rmir
-        ke
-        ks
+        rmkx
+        smkx
         ich1
 
         kich1
@@ -30,7 +30,7 @@ class RLine
         cr
       ).each do |capability|
         code = `tput #{capability}`
-        @capabilities = code unless code.empty?
+        @capabilities[capability] = code unless code.empty?
       end
     rescue Errno::ENOENT
       warn "tput is not available!"
@@ -42,8 +42,8 @@ class RLine
     cap :clear, "\e[H\e[2J"     # Clear screen
     cap :smir,  "\e[4h"         # Enter insert mode
     cap :rmir,  "\e[4l"         # Exit insert mode
-    cap :ke,    "\e>"           # Exit keypad-transmit-mode
-    cap :ks,    "\e="           # Enter keypad-transmit-mode
+    cap :rmkx,  "\e>"           # Exit keypad-transmit-mode
+    cap :smkx,  "\e="           # Enter keypad-transmit-mode
     cap :ich1,  "\e[@"          # Insert character
     cap :cub1,  "\b"            # Move left one space
     cap :cuf1,  "\e[C"          # Move right one space
@@ -63,5 +63,9 @@ class RLine
     cap :cr, "\r"
     cap :lf, "\n"
     cap :eof, "\cd"
+
+    def [](capability)
+      send(capability.to_sym)
+    end
   end
 end
