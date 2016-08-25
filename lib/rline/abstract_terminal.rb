@@ -5,7 +5,7 @@ module RLine
     end
 
     # @return [RLine::OutputToken]
-    def apply(output_token)
+    def apply_token(output_token)
     end
   end
 end

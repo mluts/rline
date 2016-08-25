@@ -2,7 +2,7 @@ module RLine
   class OutputToken
     attr_reader :value
 
-    def initialize(value)
+    def initialize(value = nil)
       @value = value
     end
 
@@ -10,6 +10,8 @@ module RLine
       other.is_a?(self.class) && other.value == value
     end
   end
-end
 
-require 'rline/output_token/print'
+  Print = Class.new(OutputToken)
+  DeleteLeft = Class.new(OutputToken)
+  Move = Class.new(OutputToken)
+end

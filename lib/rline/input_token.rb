@@ -2,10 +2,13 @@ module RLine
   class InputToken
     attr_reader :value
 
-    def initialize(value)
+    def initialize(value = nil)
       @value = value
     end
   end
-end
 
-require 'rline/input_token/character'
+  Character   = Class.new(InputToken)
+  Backspace   = Class.new(InputToken)
+  ArrowLeft   = Class.new(InputToken)
+  ArrowRight  = Class.new(InputToken)
+end
