@@ -16,6 +16,7 @@ module RLine
       when Backspace
         @input.slice!(0, @input.length-1)
         DeleteLeft.new
+      when Enter      then Exit.new
       when ArrowLeft  then Move.new(-1)
       when ArrowRight then Move.new(1)
       end

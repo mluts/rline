@@ -16,9 +16,9 @@ module RLine
 
       output_token = app.call(input_token) unless input_token.nil?
 
-      break if output_token.is_a?(Exit)
-
       term.apply_token(output_token) unless output_token.nil?
+
+      break if output_token.is_a?(Exit)
     end
 
     app.input
