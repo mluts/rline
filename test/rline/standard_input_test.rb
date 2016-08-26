@@ -31,11 +31,20 @@ class RLine::StandardInputTest < TestCase
 
     io.buf.replace RLine::StandardInput::EOT.chars
     assert_equal RLine::EOF.new, subject.next
+  end
 
-    io.buf.replace RLine::StandardInput::ENTER.chars
-    assert_equal RLine::Enter.new, subject.next
+  def test_enter
+    io.buf.replace "\r".chars
+    assert_equal RLine::Enter.new("\r"), subject.next
+  end
 
+  def test_backspace
     io.buf.replace RLine::StandardInput::BACKSPACE.chars
-    assert_equal RLine::Backspace.new, subject.next
+    assert_equal RLine::Backspace.new(RLine::StandardInput::BACKSPACE), subject.next
+  end
+
+  def test_control_char
+    io.buf.replace "\u0015".chars
+    assert_equal RLine::ControlCharacter.new("\u0015"), subject.next
   end
 end

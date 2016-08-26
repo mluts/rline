@@ -19,4 +19,9 @@ module RLine
   ArrowDown   = Class.new(InputToken)
   Enter       = Class.new(InputToken)
   EOF         = Class.new(InputToken)
+  ControlCharacter = Class.new(InputToken) do
+    def char
+      ("@".ord + value.ord).chr.downcase
+    end
+  end
 end
