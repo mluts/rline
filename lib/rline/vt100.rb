@@ -24,6 +24,20 @@ module RLine
             @row += 1
           end
         end
+      when Reset
+        @cols = @io.winsize[1]
+
+        @row.times do
+          apply DeleteLine.new
+          @io.print(up % 1)
+        end
+
+        @row = 0
+        @position = 0
+
+        apply DeleteLine.new
+      when DeleteLine
+        @io.print("\r", dch % @cols)
       when DeleteLeft
         limit = @position + @row * @cols
         length = token.value
@@ -38,8 +52,6 @@ module RLine
             @io.print(left % 1, dch % 1)
           end
         end
-      when DeleteLine
-        @io.print(dl1, "\r")
       when Move
         if token.value < 0
           @io.print(left % -token.value)

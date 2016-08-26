@@ -17,7 +17,7 @@ class RLine::ApplicationTest < TestCase
 
   def test_backspace
     call(RLine::Character.new('a'))
-    assert_equal RLine::DeleteLeft.new,
+    assert_equal RLine::DeleteLeft.new(1),
                  call(RLine::Backspace.new)
   end
 
@@ -36,6 +36,10 @@ class RLine::ApplicationTest < TestCase
   end
 
   def test_delete_line
-    assert_equal RLine::DeleteLine.new, call(RLine::ControlCharacter.new("\u0015"))
+    str = 'abcd'
+    str.chars.each { |char| call RLine::Character.new(char) }
+
+    assert_equal RLine::DeleteLeft.new(str.length),
+                 call(RLine::ControlCharacter.new("\u0015"))
   end
 end
