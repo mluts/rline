@@ -15,4 +15,6 @@ module RLine
   DeleteLeft  = Class.new(OutputToken)
   Move        = Class.new(OutputToken)
   Exit        = Class.new(OutputToken)
+  DeleteLine  = Class.new(OutputToken)
+  Reset       = Class.new(OutputToken)
 end
