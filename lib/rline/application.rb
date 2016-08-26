@@ -28,7 +28,11 @@ module RLine
           @position -= 1
           Move.new(-1)
         end
-      when ArrowRight then Move.new(1)
+      when ArrowRight
+        if @position < @input.length
+          @position += 1
+          Move.new(1)
+        end
       end
     end
   end
