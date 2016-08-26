@@ -21,7 +21,8 @@ module RLine
           @input.slice!(@position, 1)
           DeleteLeft.new
         end
-      when Enter      then Exit.new
+      when Enter, EOF
+        Exit.new
       when ArrowLeft
         if @position > 0
           @position -= 1

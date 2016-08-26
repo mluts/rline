@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 require 'io/console'
 require 'rline/escape_sequence'
 
 module RLine
   class StandardInput
-    BACKSPACE = "\u007F".freeze
-    ENTER     = "\r".freeze
+    BACKSPACE = "\u007F"
+    ENTER     = "\r"
+    EOT       = "\u0004"
 
     def initialize(io = $stdin)
       @io = io
@@ -22,6 +25,8 @@ module RLine
         Backspace.new
       when ENTER
         Enter.new
+      when EOT
+        EOF.new
       when "\e"
         escape_sequence = read_escape_sequence
         token_for(escape_sequence.string)

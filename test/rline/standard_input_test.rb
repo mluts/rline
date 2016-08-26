@@ -28,5 +28,14 @@ class RLine::StandardInputTest < TestCase
   def test_next
     io.buf.replace "\e[D".chars
     assert_equal RLine::ArrowLeft.new, subject.next
+
+    io.buf.replace RLine::StandardInput::EOT.chars
+    assert_equal RLine::EOF.new, subject.next
+
+    io.buf.replace RLine::StandardInput::ENTER.chars
+    assert_equal RLine::Enter.new, subject.next
+
+    io.buf.replace RLine::StandardInput::BACKSPACE.chars
+    assert_equal RLine::Backspace.new, subject.next
   end
 end

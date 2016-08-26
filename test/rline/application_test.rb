@@ -16,16 +16,22 @@ class RLine::ApplicationTest < TestCase
   end
 
   def test_backspace
+    call(RLine::Character.new('a'))
     assert_equal RLine::DeleteLeft.new,
                  call(RLine::Backspace.new)
   end
 
   def test_arrows
+    call(RLine::Character.new('a'))
     assert_equal RLine::Move.new(-1),
                  call(RLine::ArrowLeft.new)
   end
 
   def test_enter
     assert_equal RLine::Exit.new, call(RLine::Enter.new)
+  end
+
+  def test_eof
+    assert_equal RLine::Exit.new, call(RLine::EOF.new)
   end
 end
