@@ -7,7 +7,7 @@ require 'rline/terminal'
 module RLine
   module_function
 
-  def start
+  def gets
     app = Application.new
     term = Terminal.new
 

@@ -10,8 +10,12 @@ module RLine
     # @return [RLine::OutputToken]
     def call(token)
       case token
-      when Character  then Print.new(token.value)
-      when Backspace  then DeleteLeft.new
+      when Character
+        @input << token.value
+        Print.new(token.value)
+      when Backspace
+        @input.slice!(0, @input.length-1)
+        DeleteLeft.new
       when ArrowLeft  then Move.new(-1)
       when ArrowRight then Move.new(1)
       end
