@@ -34,4 +34,8 @@ class RLine::ApplicationTest < TestCase
   def test_eof
     assert_equal RLine::Exit.new, call(RLine::EOF.new)
   end
+
+  def test_delete_line
+    assert_equal RLine::DeleteLine.new, call(RLine::ControlCharacter.new("\u0015"))
+  end
 end

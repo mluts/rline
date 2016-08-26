@@ -10,7 +10,7 @@ module RLine
       when Print
         @io.print(token.value)
       when DeleteLeft
-        @io.print(left % 1, dch % 1)
+        @io.print(left % token.value, dch % token.value)
       when Move
         if token.value < 0
           @io.print(left % -token.value)
