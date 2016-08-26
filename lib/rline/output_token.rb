@@ -14,4 +14,5 @@ module RLine
   Print = Class.new(OutputToken)
   DeleteLeft = Class.new(OutputToken)
   Move = Class.new(OutputToken)
+  Exit = Class.new(OutputToken)
 end

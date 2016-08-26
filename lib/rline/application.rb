@@ -1,5 +1,11 @@
 module RLine
   class Application
+    attr_reader :input
+
+    def initialize
+      @input = ''
+    end
+
     # @param token [RLine::InputToken]
     # @return [RLine::OutputToken]
     def call(token)
