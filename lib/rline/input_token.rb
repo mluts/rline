@@ -18,4 +18,5 @@ module RLine
   ArrowUp     = Class.new(InputToken)
   ArrowDown   = Class.new(InputToken)
   Enter       = Class.new(InputToken)
+  EOF         = Class.new(InputToken)
 end
