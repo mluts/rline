@@ -24,4 +24,8 @@ class RLine::ApplicationTest < TestCase
     assert_equal RLine::Move.new(-1),
                  call(RLine::ArrowLeft.new)
   end
+
+  def test_enter
+    assert_equal RLine::Exit.new, call(RLine::Enter.new)
+  end
 end

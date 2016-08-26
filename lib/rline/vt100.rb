@@ -11,6 +11,8 @@ module RLine
         @io.print(token.value)
       when DeleteLeft
         @io.print left1, del1
+      when Exit
+        @io.print "\r\n"
       end
     end
 

@@ -4,6 +4,7 @@ require 'rline/escape_sequence'
 module RLine
   class StandardInput
     BACKSPACE = "\u007F".freeze
+    ENTER     = "\r".freeze
 
     def initialize(io = $stdin)
       @io = io
@@ -19,6 +20,8 @@ module RLine
       case char
       when BACKSPACE
         Backspace.new
+      when ENTER
+        Enter.new
       when "\e"
         escape_sequence = read_escape_sequence
         token_for(escape_sequence.string)
