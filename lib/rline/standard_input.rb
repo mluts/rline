@@ -8,6 +8,8 @@ module RLine
     BACKSPACE = "\u007F"
     ENTER     = "\r"
     EOT       = "\u0004"
+    ESCAPE    = "\e"
+    CONTROL_CHARACTER = "\u0000".."\u001F"
 
     def initialize(io = $stdin)
       @io = io
@@ -22,14 +24,16 @@ module RLine
     def translate(char)
       case char
       when BACKSPACE
-        Backspace.new
+        Backspace.new(char)
       when ENTER
-        Enter.new
+        Enter.new(char)
       when EOT
         EOF.new
-      when "\e"
+      when ESCAPE
         escape_sequence = read_escape_sequence
         token_for(escape_sequence.string)
+      when CONTROL_CHARACTER
+        ControlCharacter.new(char)
       else
         Character.new(char)
       end

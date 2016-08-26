@@ -10,7 +10,13 @@ module RLine
       when Print
         @io.print(token.value)
       when DeleteLeft
-        @io.print left1, del1
+        @io.print(left % token.value, dch % token.value)
+      when Move
+        if token.value < 0
+          @io.print(left % -token.value)
+        elsif token.value > 0
+          @io.print(right % token.value)
+        end
       when Exit
         @io.print "\r\n"
       end
@@ -18,12 +24,16 @@ module RLine
 
     private
 
-    def left1
-      @left1 ||= `tput cub1`
+    def left
+      @left ||= `tput cub 0`.sub('0', '%s')
     end
 
-    def del1
-      @del1 ||= `tput dch1`
+    def right
+      @right ||= `tput cuf 0`.sub('0', '%s')
+    end
+
+    def dch
+      @dch ||= `tput dch 0`.sub('0', '%s')
     end
   end
 end

@@ -19,7 +19,7 @@ module RLine
         if @position > 0
           @position -= 1
           @input.slice!(@position, 1)
-          DeleteLeft.new
+          DeleteLeft.new(1)
         end
       when Enter, EOF
         Exit.new
@@ -28,7 +28,22 @@ module RLine
           @position -= 1
           Move.new(-1)
         end
-      when ArrowRight then Move.new(1)
+      when ArrowRight
+        if @position < @input.length
+          @position += 1
+          Move.new(1)
+        end
+      when ControlCharacter
+        case token.char
+        when 'u'
+          if @position > 0
+            position = @position
+            @position = 0
+
+            @input.slice!(0, position)
+            DeleteLeft.new(position)
+          end
+        end
       end
     end
   end
