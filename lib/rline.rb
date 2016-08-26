@@ -7,9 +7,11 @@ require 'rline/terminal'
 module RLine
   module_function
 
-  def gets
+  def gets(prompt = '> ')
     app = Application.new
     term = Terminal.new
+
+    term.apply_token(Print.new(prompt))
 
     loop do
       input_token = term.next_token

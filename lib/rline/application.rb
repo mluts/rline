@@ -3,6 +3,7 @@ module RLine
     attr_reader :input
 
     def initialize
+      @position = 0
       @input = ''
     end
 
@@ -12,12 +13,20 @@ module RLine
       case token
       when Character
         @input << token.value
+        @position += 1
         Print.new(token.value)
       when Backspace
-        @input.slice!(0, @input.length-1)
-        DeleteLeft.new
+        if @position > 0
+          @position -= 1
+          @input.slice!(@position, 1)
+          DeleteLeft.new
+        end
       when Enter      then Exit.new
-      when ArrowLeft  then Move.new(-1)
+      when ArrowLeft
+        if @position > 0
+          @position -= 1
+          Move.new(-1)
+        end
       when ArrowRight then Move.new(1)
       end
     end
