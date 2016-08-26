@@ -24,4 +24,5 @@ module RLine
       ("@".ord + value.ord).chr.downcase
     end
   end
+  Delete = Class.new(InputToken)
 end
