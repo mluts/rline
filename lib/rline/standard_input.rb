@@ -41,10 +41,11 @@ module RLine
 
     def token_for(string)
       case string
-      when "\e[A" then RLine::ArrowUp.new
-      when "\e[B" then RLine::ArrowDown.new
-      when "\e[C" then RLine::ArrowRight.new
-      when "\e[D" then RLine::ArrowLeft.new
+      when "\e[A"   then RLine::ArrowUp.new
+      when "\e[B"   then RLine::ArrowDown.new
+      when "\e[C"   then RLine::ArrowRight.new
+      when "\e[D"   then RLine::ArrowLeft.new
+      when "\e[3~"  then RLine::Delete.new
       end
     end
 

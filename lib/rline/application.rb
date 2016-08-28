@@ -33,6 +33,11 @@ module RLine
           @position += 1
           Move.new(1)
         end
+      when Delete
+        if @position < @input.length
+          @input.slice!(@position, 1)
+          DeleteRight.new(1)
+        end
       when ControlCharacter
         case token.char
         when 'u'

@@ -52,6 +52,8 @@ module RLine
             @io.print(left % 1, dch % 1)
           end
         end
+      when DeleteRight
+        @io.print(dch % token.value)
       when Move
         if token.value < 0
           @io.print(left % -token.value)
