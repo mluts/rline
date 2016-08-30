@@ -1,33 +1,9 @@
+require 'rline/utils'
+require 'rline/cursor'
+
 module RLine
   class Line
-    class Cursor
-      attr_reader :position
-
-      def initialize(screen_width)
-        @position = 0
-        @screen_width = screen_width
-      end
-
-      def move(n)
-        if @position + n < 0
-          @position = 0
-        else
-          @position += n
-        end
-      end
-
-      def col
-        @position % @screen_width
-      end
-
-      def row
-        @position / @screen_width
-      end
-
-      def reset(width)
-        @width = width
-      end
-    end
+    include RLine::Utils
 
     attr_reader :text, :cursor
 
@@ -37,9 +13,30 @@ module RLine
       @cursor = Cursor.new(width)
     end
 
-    def push(text)
-      @text << text
+    def insert(text)
+      @text = [
+        @text[0...@cursor.position],
+        text,
+        @text[@cursor.position..-1]
+      ].join
+
       @cursor.move(text.length)
+
+      if @cursor.position < @text.length
+        redraw(@text, @cursor.position, @width)
+      else
+        Print.new(text)
+      end
+    end
+
+    def move_cursor(n)
+      if @cursor.position + n > @text.length
+        @cursor.move(@text.length - @cursor.position)
+      elsif @cursor.position + n < 0
+        @cursor.move(-@cursor.position)
+      else
+        @cursor.move(n)
+      end
     end
 
     def reset(width)
@@ -49,6 +46,37 @@ module RLine
 
     def wrapped?
       @text.length > @width
+    end
+
+    def lines
+      @text.length / @width
+    end
+
+    def length
+      @text.length
+    end
+
+    private
+
+    def redraw(text, position, width)
+      tokens = [ClearToEnd.new]
+      parts = break_text(text, position, width)
+
+      parts.each do |part|
+        tokens.push(
+          Print.new(part),
+          CursorDown.new(1),
+          CarriageReturn.new
+        )
+      end
+
+      tokens.push(
+        CursorUp.new(parts.count),
+        CarriageReturn.new,
+        CursorRight.new(column(position, width))
+      )
+
+      OutputSequence.new(tokens)
     end
   end
 end

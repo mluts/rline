@@ -18,4 +18,13 @@ module RLine
   Exit        = Class.new(OutputToken)
   DeleteLine  = Class.new(OutputToken)
   Reset       = Class.new(OutputToken)
+  OutputSequence    = Class.new(OutputToken)
+  Newline           = Class.new(OutputToken)
+
+  CursorDown = Class.new(OutputToken)
+  CursorUp   = Class.new(OutputToken)
+  CursorRight = Class.new(OutputToken)
+  CursorLeft = Class.new(OutputToken)
+  ClearToEnd = Class.new(OutputToken)
+  CarriageReturn = Class.new(OutputToken)
 end
