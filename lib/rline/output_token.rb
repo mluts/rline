@@ -21,10 +21,12 @@ module RLine
   OutputSequence    = Class.new(OutputToken)
   Newline           = Class.new(OutputToken)
 
-  CursorDown = Class.new(OutputToken)
-  CursorUp   = Class.new(OutputToken)
-  CursorRight = Class.new(OutputToken)
-  CursorLeft = Class.new(OutputToken)
-  ClearToEnd = Class.new(OutputToken)
-  CarriageReturn = Class.new(OutputToken)
+  CursorDown      = Class.new(OutputToken)
+  CursorUp        = Class.new(OutputToken)
+  CursorRight     = Class.new(OutputToken)
+  CursorLeft      = Class.new(OutputToken)
+  ClearToEnd      = Class.new(OutputToken)
+  CarriageReturn  = Class.new(OutputToken)
+
+  ReplaceAt       = Class.new(OutputToken)
 end

@@ -1,5 +1,6 @@
 require 'rline/utils'
 require 'rline/cursor'
+require 'rline/line/insert'
 
 module RLine
   class Line
@@ -13,19 +14,24 @@ module RLine
       @cursor = Cursor.new(width)
     end
 
-    def insert(text)
+    def insert(char)
+      old_position = @cursor.position
+
       @text = [
         @text[0...@cursor.position],
         text,
-        @text[@cursor.position..-1]
+        (right_part = @text[@cursor.position..-1])
       ].join
+
+      (old_position...@text.length).each do |index|
+      end
 
       @cursor.move(text.length)
 
-      if @cursor.position < @text.length
+      if false && @cursor.position < @text.length
         redraw(@text, @cursor.position, @width)
       else
-        Print.new(text)
+        Print.new(text + right_part)
       end
     end
 
