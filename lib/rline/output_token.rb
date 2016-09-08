@@ -18,4 +18,7 @@ module RLine
   Exit        = Class.new(OutputToken)
   DeleteLine  = Class.new(OutputToken)
   Reset       = Class.new(OutputToken)
+
+  MoveHorizontal = Class.new(OutputToken)
+  MoveVertical = Class.new(OutputToken)
 end
