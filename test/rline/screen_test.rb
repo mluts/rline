@@ -30,4 +30,18 @@ class RLine::ScreenTest < TestCase
     assert_equal text.length, subject.cursor
     assert_equal text, subject.line
   end
+
+  def test_print_wrapped
+    text = 'a' * (width * 1.5).to_i
+
+    tokens = text.chars.map { |c| subject.print_char(c) }
+
+    expected_tokens = [
+      *text[0...(width - 1)].chars.map { |c| RLine::Print.new(c) },
+      [RLine::Print.new(text[width - 1]), RLine::WrapLine.new],
+      *text[width..-1].chars.map { |c| RLine::Print.new(c) }
+    ]
+
+    assert_equal expected_tokens, tokens
+  end
 end

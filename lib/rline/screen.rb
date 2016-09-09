@@ -11,7 +11,12 @@ module RLine
     def print_char(char)
       @line << char
       @cursor += 1
-      Print.new(char)
+
+      if @cursor == @columns
+        [Print.new(char), RLine::WrapLine.new]
+      else
+        Print.new(char)
+      end
     end
   end
 end

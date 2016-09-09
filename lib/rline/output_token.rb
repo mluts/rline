@@ -19,6 +19,7 @@ module RLine
   DeleteLine  = Class.new(OutputToken)
   Reset       = Class.new(OutputToken)
 
-  MoveHorizontal = Class.new(OutputToken)
-  MoveVertical = Class.new(OutputToken)
+  MoveHorizontal  = Class.new(OutputToken)
+  MoveVertical    = Class.new(OutputToken)
+  WrapLine        = Class.new(OutputToken)
 end
