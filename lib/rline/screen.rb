@@ -12,7 +12,7 @@ module RLine
       @line << char
       @cursor += 1
 
-      if @cursor == @columns
+      if at_edge?
         [Print.new(char), RLine::WrapLine.new]
       else
         Print.new(char)
@@ -28,7 +28,19 @@ module RLine
     def move_right
       if @cursor < @line.length
         @cursor += 1
+
+        if at_edge?
+          WrapLine.new
+        else
+          MoveRight.new
+        end
       end
+    end
+
+    private
+
+    def at_edge?
+      (@cursor % @columns).zero?
     end
   end
 end

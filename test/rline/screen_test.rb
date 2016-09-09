@@ -78,4 +78,22 @@ class RLine::ScreenTest < TestCase
     100.times { subject.move_right }
     assert_equal text.length, subject.cursor
   end
+
+  def test_move_right_wrap
+    text = 'a' * (width * 2)
+    text.chars.each { |c| subject.print_char(c) }
+    100.times { subject.move_left }
+
+    count = width * 1.5
+
+    tokens = Array.new(count).map { subject.move_right }
+
+    expected_tokens = [
+      *Array.new(width - 1).map { RLine::MoveRight.new },
+      RLine::WrapLine.new,
+      *Array.new(count - width).map { RLine::MoveRight.new }
+    ]
+
+    assert_equal expected_tokens, tokens
+  end
 end
