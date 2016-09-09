@@ -44,4 +44,38 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_move_left
+    text = 'a' * width
+
+    text.chars.each { |c| subject.print_char(c) }
+
+    assert_equal text.length, subject.cursor
+    subject.move_left
+    assert_equal text.length - 1, subject.cursor
+  end
+
+  def test_move_left_impossible
+    assert_equal 0, subject.cursor
+    subject.move_left
+    assert_equal 0, subject.cursor
+  end
+
+  def test_move_right
+    text = 'a' * width
+    text.chars.each { |c| subject.print_char(c) }
+    100.times { subject.move_left }
+    assert_equal 0, subject.cursor
+    subject.move_right
+    assert_equal 1, subject.cursor
+  end
+
+  def test_move_right_impossible
+    text = 'a' * width
+    text.chars.each { |c| subject.print_char(c) }
+    100.times { subject.move_left }
+    assert_equal 0, subject.cursor
+    100.times { subject.move_right }
+    assert_equal text.length, subject.cursor
+  end
 end

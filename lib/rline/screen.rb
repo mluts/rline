@@ -18,5 +18,17 @@ module RLine
         Print.new(char)
       end
     end
+
+    def move_left
+      if @cursor > 0
+        @cursor -= 1
+      end
+    end
+
+    def move_right
+      if @cursor < @line.length
+        @cursor += 1
+      end
+    end
   end
 end
