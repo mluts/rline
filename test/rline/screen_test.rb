@@ -96,4 +96,23 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_move_left_wrap
+    text = 'a' * (width * 2)
+
+    text.chars.each { |c| subject.print_char(c) }
+
+    tokens = Array.new(text.length).map do
+      subject.move_left
+    end
+
+    expected_tokens = [
+      RLine::UnwrapLine.new,
+      *Array.new(width - 1).map { RLine::MoveLeft.new },
+      RLine::UnwrapLine.new,
+      *Array.new(width - 1).map { RLine::MoveLeft.new }
+    ]
+
+    assert_equal expected_tokens, tokens
+  end
 end

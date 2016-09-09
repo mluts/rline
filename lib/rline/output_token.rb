@@ -24,4 +24,5 @@ module RLine
   MoveUp      = Class.new(OutputToken)
   MoveDown    = Class.new(OutputToken)
   WrapLine    = Class.new(OutputToken)
+  UnwrapLine  = Class.new(OutputToken)
 end
