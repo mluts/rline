@@ -16,7 +16,7 @@ module RLine
       end
     end
 
-    def move_left
+    def left
       if @cursor > 0
         @cursor -= 1
 
@@ -28,7 +28,7 @@ module RLine
       end
     end
 
-    def move_right
+    def right
       if @cursor < @line.length
         @cursor += 1
 
@@ -43,10 +43,34 @@ module RLine
     def kill
       unless @line[@cursor].nil?
         @line.slice!(@cursor, 1)
+
+        if @line.length + 1 < @columns
+          Kill.new
+        else
+          redraw_kill
+        end
       end
     end
 
     private
+
+    def redraw_kill
+      tokens = []
+
+      tokens << Kill.new
+
+      @line[@cursor..-1].chars.each do |c|
+        tokens << append(c)
+      end
+
+      tokens << Kill.new
+
+      (@line.length - @cursor).times do
+        tokens << left
+      end
+
+      tokens
+    end
 
     def beyond_right?
       (@cursor % @columns).zero?
@@ -87,7 +111,7 @@ module RLine
       end
 
       (@line.length - @cursor).times do
-        tokens << move_left
+        tokens << left
       end
 
       tokens

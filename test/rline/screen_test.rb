@@ -45,48 +45,48 @@ class RLine::ScreenTest < TestCase
     assert_equal expected_tokens, tokens
   end
 
-  def test_move_left
+  def test_left
     text = 'a' * width
 
     text.chars.each { |c| subject.print_char(c) }
 
     assert_equal text.length, subject.cursor
-    subject.move_left
+    subject.left
     assert_equal text.length - 1, subject.cursor
   end
 
-  def test_move_left_impossible
+  def test_left_impossible
     assert_equal 0, subject.cursor
-    subject.move_left
+    subject.left
     assert_equal 0, subject.cursor
   end
 
-  def test_move_right
+  def test_right
     text = 'a' * width
     text.chars.each { |c| subject.print_char(c) }
-    100.times { subject.move_left }
+    100.times { subject.left }
     assert_equal 0, subject.cursor
-    subject.move_right
+    subject.right
     assert_equal 1, subject.cursor
   end
 
-  def test_move_right_impossible
+  def test_right_impossible
     text = 'a' * width
     text.chars.each { |c| subject.print_char(c) }
-    100.times { subject.move_left }
+    100.times { subject.left }
     assert_equal 0, subject.cursor
-    100.times { subject.move_right }
+    100.times { subject.right }
     assert_equal text.length, subject.cursor
   end
 
-  def test_move_right_wrap
+  def test_right_wrap
     text = 'a' * (width * 2)
     text.chars.each { |c| subject.print_char(c) }
-    100.times { subject.move_left }
+    100.times { subject.left }
 
     count = width * 1.5
 
-    tokens = Array.new(count).map { subject.move_right }
+    tokens = Array.new(count).map { subject.right }
 
     expected_tokens = [
       *Array.new(width - 1).map { RLine::MoveRight.new },
@@ -97,13 +97,13 @@ class RLine::ScreenTest < TestCase
     assert_equal expected_tokens, tokens
   end
 
-  def test_move_left_wrap
+  def test_left_wrap
     text = 'a' * (width * 2)
 
     text.chars.each { |c| subject.print_char(c) }
 
     tokens = Array.new(text.length).map do
-      subject.move_left
+      subject.left
     end
 
     expected_tokens = [
@@ -120,7 +120,7 @@ class RLine::ScreenTest < TestCase
     text = 'asdasd'
 
     text.chars.each { |c| subject.print_char(c) }
-    3.times { subject.move_left }
+    3.times { subject.left }
 
     token = subject.print_char('f')
 
@@ -138,22 +138,52 @@ class RLine::ScreenTest < TestCase
   def test_kill
     text = 'asdasd'
     text.chars.each { |c| subject.print_char(c) }
-    3.times { subject.move_left }
+    3.times { subject.left }
 
-    subject.kill
+    assert_equal RLine::Kill.new, subject.kill
     assert_equal 'asdsd', subject.line
     assert_equal 3, subject.cursor
 
-    subject.kill
+    assert_equal RLine::Kill.new, subject.kill
     assert_equal 'asdd', subject.line
     assert_equal 3, subject.cursor
 
-    subject.kill
+    assert_equal RLine::Kill.new, subject.kill
     assert_equal 'asd', subject.line
     assert_equal 3, subject.cursor
 
-    subject.kill
+    assert_nil   subject.kill
     assert_equal 'asd', subject.line
     assert_equal 3, subject.cursor
+  end
+
+  def test_kill_wrap
+    text = 'abcde12345abc'
+    text.chars.each { |c| subject.print_char(c) }
+    100.times { subject.left }
+    5.times { subject.right }
+
+    tokens = subject.kill
+
+    expected_tokens = [
+      RLine::Kill.new,
+      RLine::Print.new('2'),
+      RLine::Print.new('3'),
+      RLine::Print.new('4'),
+      RLine::Print.new('5'),
+      [RLine::Print.new('a'), RLine::WrapLine.new],
+      RLine::Print.new('b'),
+      RLine::Print.new('c'),
+      RLine::Kill.new,
+      RLine::MoveLeft.new,
+      RLine::MoveLeft.new,
+      RLine::UnwrapLine.new,
+      RLine::MoveLeft.new,
+      RLine::MoveLeft.new,
+      RLine::MoveLeft.new,
+      RLine::MoveLeft.new
+    ]
+
+    assert_equal expected_tokens, tokens
   end
 end

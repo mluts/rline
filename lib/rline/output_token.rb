@@ -25,4 +25,5 @@ module RLine
   MoveDown    = Class.new(OutputToken)
   WrapLine    = Class.new(OutputToken)
   UnwrapLine  = Class.new(OutputToken)
+  Kill        = Class.new(OutputToken)
 end
