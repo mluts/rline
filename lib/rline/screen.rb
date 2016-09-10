@@ -59,13 +59,15 @@ module RLine
 
       tokens << Kill.new
 
-      @line[@cursor..-1].chars.each do |c|
-        tokens << append(c)
+      to_redraw = @line[@cursor..-1]
+
+      to_redraw.chars.each do |c|
+        tokens << append(c, true)
       end
 
       tokens << Kill.new
 
-      (@line.length - @cursor).times do
+      to_redraw.length.times do
         tokens << left
       end
 
@@ -84,8 +86,11 @@ module RLine
       @cursor < @line.length
     end
 
-    def append(char)
-      @line << char
+    def append(char, screen_only = false)
+      unless screen_only
+        @line << char
+      end
+
       @cursor += 1
 
       if beyond_right?
@@ -99,18 +104,18 @@ module RLine
       @line = [
         @line[0...@cursor],
         char,
-        @line[@cursor..-1]
+        right_part = @line[@cursor..-1]
       ].join
-
-      @cursor += 1
 
       tokens = []
 
-      @line[(@cursor - 1)..-1].chars.map do |c|
-        tokens << append(c)
+      tokens << append(char, true)
+
+      right_part.chars.map do |c|
+        tokens << append(c, true)
       end
 
-      (@line.length - @cursor).times do
+      right_part.length.times do
         tokens << left
       end
 

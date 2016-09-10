@@ -13,10 +13,12 @@ module RLine
     end
 
     def gets
-      @term.apply_token(Print.new(@prompt))
-
       should_reset = false
       trap(:SIGWINCH) { should_reset = true }
+
+      @prompt.chars.each do |c|
+        @term.apply_token @app.call(Character.new(c))
+      end
 
       loop do
         input_token = @term.next_token
@@ -33,13 +35,13 @@ module RLine
         end
       end
 
-      @app.input
+      @app.screen.line
     end
 
     def reset
-      @term.apply_token(Reset.new)
-      @term.apply_token(Print.new(@prompt))
-      @term.apply_token(Print.new(@app.input))
+      # @term.apply_token(Reset.new)
+      # @term.apply_token(Print.new(@prompt))
+      # @term.apply_token(Print.new(@app.input))
     end
   end
 
