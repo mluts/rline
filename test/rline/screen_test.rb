@@ -186,4 +186,23 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_left_bound
+    left_bound = 2
+    subject = RLine::Screen.new(width, left_bound)
+
+    assert_equal 0, subject.cursor
+
+    subject.print_char('a')
+    assert_equal 1, subject.cursor
+
+    subject.print_char('a')
+    assert_equal 2, subject.cursor
+
+    subject.print_char('a')
+    assert_equal 3, subject.cursor
+
+    10.times { subject.left }
+    assert_equal left_bound, subject.cursor
+  end
 end
