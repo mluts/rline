@@ -9,6 +9,10 @@ class RLine::ApplicationTest < TestCase
     @screen ||= Minitest::Mock.new
   end
 
+  def ctrl_(char)
+    RLine::ControlCharacter.new((char.ord - '@'.ord).chr)
+  end
+
   def teardown
     screen.verify
   end
@@ -65,5 +69,22 @@ class RLine::ApplicationTest < TestCase
     screen.expect(:kill, result)
 
     assert_equal result, call(RLine::Delete.new)
+  end
+
+  def test_ctrl_u
+    left_result = rand
+    kill_result = rand
+    cursor = 5
+
+    2.times do
+      screen.expect(:cursor, cursor)
+    end
+
+    cursor.times do
+      screen.expect(:left, left_result)
+      screen.expect(:kill, kill_result)
+    end
+
+    assert_equal [left_result, kill_result] * cursor, call(ctrl_('u'))
   end
 end
