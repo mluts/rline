@@ -40,6 +40,12 @@ module RLine
       end
     end
 
+    def kill
+      unless @line[@cursor].nil?
+        @line.slice!(@cursor, 1)
+      end
+    end
+
     private
 
     def beyond_right?

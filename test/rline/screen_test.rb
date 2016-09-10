@@ -134,4 +134,26 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_token, token
   end
+
+  def test_kill
+    text = 'asdasd'
+    text.chars.each { |c| subject.print_char(c) }
+    3.times { subject.move_left }
+
+    subject.kill
+    assert_equal 'asdsd', subject.line
+    assert_equal 3, subject.cursor
+
+    subject.kill
+    assert_equal 'asdd', subject.line
+    assert_equal 3, subject.cursor
+
+    subject.kill
+    assert_equal 'asd', subject.line
+    assert_equal 3, subject.cursor
+
+    subject.kill
+    assert_equal 'asd', subject.line
+    assert_equal 3, subject.cursor
+  end
 end
