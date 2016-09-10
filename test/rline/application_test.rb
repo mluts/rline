@@ -58,4 +58,12 @@ class RLine::ApplicationTest < TestCase
 
     assert_equal result, call(RLine::ArrowRight.new)
   end
+
+  def test_delete
+    result = rand
+
+    screen.expect(:kill, result)
+
+    assert_equal result, call(RLine::Delete.new)
+  end
 end
