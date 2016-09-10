@@ -2,64 +2,27 @@ require 'io/console'
 
 module RLine
   class VT100
-    def initialize(io = $stdout, cols = io.winsize[1])
+    def initialize(io = $stdout)
       @io = io
-      @position = 0
-      @row = 0
-      @cols = cols
-      apply DeleteLine.new
     end
 
     # @param token [RLine::OutputToken]
     def apply(token)
       case token
+      when Array
+        token.each(&method(:apply))
       when Print
-        token.value.chars.each do |char|
-          @position += 1
-          @io.print(char)
-
-          if @position == @cols
-            @io.print("\r\n")
-            @position = 0
-            @row += 1
-          end
-        end
-      when Reset
-        @cols = @io.winsize[1]
-
-        @row.times do
-          apply DeleteLine.new
-          @io.print(up % 1)
-        end
-
-        @row = 0
-        @position = 0
-
-        apply DeleteLine.new
-      when DeleteLine
-        @io.print("\r", dch % @cols)
-      when DeleteLeft
-        limit = @position + @row * @cols
-        length = token.value
-        length = limit if length > limit
-        length.times do
-          if @position == 0 && @row > 0
-            @io.print(up % 1, "\r", right % @cols, dch % 1)
-            @row -= 1
-            @position = @cols - 1
-          else
-            @position -= 1
-            @io.print(left % 1, dch % 1)
-          end
-        end
-      when DeleteRight
-        @io.print(dch % token.value)
-      when Move
-        if token.value < 0
-          @io.print(left % -token.value)
-        elsif token.value > 0
-          @io.print(right % token.value)
-        end
+        @io.print(token.value)
+      when MoveRight
+        @io.print(right % 1)
+      when MoveLeft
+        @io.print(left % 1)
+      when WrapLine
+        @io.print("\r\n")
+      when UnwrapLine
+        @io.print(up % 1, "\r", right % cols)
+      when Kill
+        @io.print(dch % 1)
       when Exit
         @io.print "\r\n"
       end
@@ -89,6 +52,10 @@ module RLine
 
     def dl1
       @dl1 ||= `tput dl1`
+    end
+
+    def cols
+      @io.winsize[1]
     end
   end
 end

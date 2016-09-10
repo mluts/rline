@@ -1,10 +1,12 @@
+require 'io/console'
+require 'rline/screen'
+
 module RLine
   class Application
-    attr_reader :input
+    attr_reader :input, :screen
 
     def initialize
-      @position = 0
-      @input = ''
+      @screen = Screen.new($stdin.winsize[1])
     end
 
     # @param token [RLine::InputToken]
@@ -12,41 +14,30 @@ module RLine
     def call(token)
       case token
       when Character
-        @input << token.value
-        @position += 1
-        Print.new(token.value)
+        @screen.print_char(token.value)
       when Backspace
-        if @position > 0
-          @position -= 1
-          @input.slice!(@position, 1)
-          DeleteLeft.new(1)
-        end
+        [
+          *@screen.left,
+          *@screen.kill
+        ]
       when Enter, EOF
         Exit.new
       when ArrowLeft
-        if @position > 0
-          @position -= 1
-          Move.new(-1)
-        end
+        @screen.left
       when ArrowRight
-        if @position < @input.length
-          @position += 1
-          Move.new(1)
-        end
+        @screen.right
       when Delete
-        if @position < @input.length
-          @input.slice!(@position, 1)
-          DeleteRight.new(1)
-        end
+        @screen.kill
       when ControlCharacter
         case token.char
         when 'u'
-          if @position > 0
-            position = @position
-            @position = 0
-
-            @input.slice!(0, position)
-            DeleteLeft.new(position)
+          if @screen.cursor > 0
+            token = []
+            @screen.cursor.times do
+              token << @screen.left
+              token << @screen.kill
+            end
+            token
           end
         end
       end
