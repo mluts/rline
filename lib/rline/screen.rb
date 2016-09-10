@@ -9,13 +9,10 @@ module RLine
     end
 
     def print_char(char)
-      @line << char
-      @cursor += 1
-
-      if beyond_right?
-        [Print.new(char), RLine::WrapLine.new]
+      if insert?
+        insert(char)
       else
-        Print.new(char)
+        append(char)
       end
     end
 
@@ -51,6 +48,43 @@ module RLine
 
     def beyond_left?
       ((@cursor + 1) % @columns).zero?
+    end
+
+    def insert?
+      @cursor < @line.length
+    end
+
+    def append(char)
+      @line << char
+      @cursor += 1
+
+      if beyond_right?
+        [Print.new(char), WrapLine.new]
+      else
+        Print.new(char)
+      end
+    end
+
+    def insert(char)
+      @line = [
+        @line[0...@cursor],
+        char,
+        @line[@cursor..-1]
+      ].join
+
+      @cursor += 1
+
+      tokens = []
+
+      @line[(@cursor - 1)..-1].chars.map do |c|
+        tokens << append(c)
+      end
+
+      (@line.length - @cursor).times do
+        tokens << move_left
+      end
+
+      tokens
     end
   end
 end

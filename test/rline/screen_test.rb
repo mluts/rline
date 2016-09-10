@@ -115,4 +115,23 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_print_inside_text
+    text = 'asdasd'
+
+    text.chars.each { |c| subject.print_char(c) }
+    3.times { subject.move_left }
+
+    token = subject.print_char('f')
+
+    expected_token = [
+      RLine::Print.new('f'),
+      RLine::Print.new('a'),
+      RLine::Print.new('s'),
+      RLine::Print.new('d'),
+      *Array.new(3).map { RLine::MoveLeft.new }
+    ]
+
+    assert_equal expected_token, token
+  end
 end
