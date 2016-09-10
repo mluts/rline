@@ -1,12 +1,9 @@
-require 'io/console'
-require 'rline/screen'
-
 module RLine
   class Application
     attr_reader :input, :screen
 
-    def initialize
-      @screen = Screen.new($stdin.winsize[1])
+    def initialize(screen)
+      @screen = screen
     end
 
     # @param token [RLine::InputToken]
