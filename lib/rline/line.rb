@@ -8,7 +8,7 @@ module RLine
   class Line
     def initialize(prompt = '> ')
       @term = RLine::Terminal.new
-      @screen = RLine::Screen.new($stdin.winsize[1])
+      @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
       @app = RLine::Application.new(@screen)
       @prompt = prompt
     end

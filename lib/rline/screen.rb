@@ -2,10 +2,11 @@ module RLine
   class Screen
     attr_reader :line, :cursor
 
-    def initialize(columns)
+    def initialize(columns, left_bound = 0)
       @line = ''
       @cursor = 0
       @columns = columns
+      @left_bound = left_bound
     end
 
     def print_char(char)
@@ -17,7 +18,7 @@ module RLine
     end
 
     def left
-      if @cursor > 0
+      if @cursor > @left_bound
         @cursor -= 1
 
         if beyond_left?
