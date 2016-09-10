@@ -12,12 +12,7 @@ module RLine
   end
 
   Print       = Class.new(OutputToken)
-  DeleteLeft  = Class.new(OutputToken)
-  DeleteRight = Class.new(OutputToken)
-  Move        = Class.new(OutputToken)
   Exit        = Class.new(OutputToken)
-  DeleteLine  = Class.new(OutputToken)
-  Reset       = Class.new(OutputToken)
 
   MoveRight   = Class.new(OutputToken)
   MoveLeft    = Class.new(OutputToken)

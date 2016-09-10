@@ -29,16 +29,17 @@ module RLine
       when Delete
         @screen.kill
       when ControlCharacter
-        # case token.char
-        # when 'u'
-        #   if @position > 0
-        #     position = @position
-        #     @position = 0
-        #
-        #     @input.slice!(0, position)
-        #     DeleteLeft.new(position)
-        #   end
-        # end
+        case token.char
+        when 'u'
+          if @screen.cursor > 0
+            token = []
+            @screen.cursor.times do
+              token << @screen.left
+              token << @screen.kill
+            end
+            token
+          end
+        end
       end
     end
   end

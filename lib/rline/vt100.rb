@@ -2,12 +2,8 @@ require 'io/console'
 
 module RLine
   class VT100
-    def initialize(io = $stdout, cols = io.winsize[1])
+    def initialize(io = $stdout)
       @io = io
-      @position = 0
-      @row = 0
-      @cols = cols
-      apply DeleteLine.new
     end
 
     # @param token [RLine::OutputToken]
@@ -24,7 +20,7 @@ module RLine
       when WrapLine
         @io.print("\r\n")
       when UnwrapLine
-        @io.print(up % 1, "\r", right % @cols)
+        @io.print(up % 1, "\r", right % cols)
       when Kill
         @io.print(dch % 1)
       when Exit
@@ -56,6 +52,10 @@ module RLine
 
     def dl1
       @dl1 ||= `tput dl1`
+    end
+
+    def cols
+      @io.winsize[1]
     end
   end
 end
