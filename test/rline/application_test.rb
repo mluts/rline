@@ -9,6 +9,10 @@ class RLine::ApplicationTest < TestCase
     @screen ||= Minitest::Mock.new
   end
 
+  def teardown
+    screen.verify
+  end
+
   def call(*args)
     subject.call(*args)
   end
@@ -27,8 +31,6 @@ class RLine::ApplicationTest < TestCase
     screen.expect(:print_char, result, [char])
 
     assert_equal result, call(RLine::Character.new(char))
-
-    screen.verify
   end
 
   def test_backspace
@@ -39,7 +41,21 @@ class RLine::ApplicationTest < TestCase
     screen.expect(:kill, result2)
 
     assert_equal [result1, result2], call(RLine::Backspace.new)
+  end
 
-    screen.verify
+  def test_left
+    result = rand
+
+    screen.expect(:left, result)
+
+    assert_equal result, call(RLine::ArrowLeft.new)
+  end
+
+  def test_right
+    result = rand
+
+    screen.expect(:right, result)
+
+    assert_equal result, call(RLine::ArrowRight.new)
   end
 end
