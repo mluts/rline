@@ -30,4 +30,16 @@ class RLine::ApplicationTest < TestCase
 
     screen.verify
   end
+
+  def test_backspace
+    result1 = rand
+    result2 = rand
+
+    screen.expect(:left, result1)
+    screen.expect(:kill, result2)
+
+    assert_equal [result1, result2], call(RLine::Backspace.new)
+
+    screen.verify
+  end
 end
