@@ -224,4 +224,21 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_kill_line
+    text = 'a' * width
+
+    text.chars.each { |c| subject.print_char(c) }
+    tokens = subject.kill_line
+
+    expected_tokens = [
+      RLine::UnwrapLine.new(width),
+      *Array.new(width - 1, RLine::MoveLeft.new),
+      RLine::ClearToEndOfScreen.new
+    ]
+
+    assert_equal 0, subject.cursor
+    assert_equal '', subject.line
+    assert_equal expected_tokens, tokens
+  end
 end
