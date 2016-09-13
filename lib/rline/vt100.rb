@@ -20,11 +20,13 @@ module RLine
       when WrapLine
         @io.print("\r\n")
       when UnwrapLine
-        @io.print(up % 1, "\r", right % cols)
+        @io.print(up % 1, "\r", right % (token.value - 1))
       when Kill
         @io.print(dch % 1)
       when Exit
         @io.print "\r\n"
+      when ClearToEndOfScreen
+        @io.print ed
       end
     end
 
@@ -54,8 +56,8 @@ module RLine
       @dl1 ||= `tput dl1`
     end
 
-    def cols
-      @io.winsize[1]
+    def ed
+      @ed ||= `tput ed`
     end
   end
 end

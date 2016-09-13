@@ -21,4 +21,5 @@ module RLine
   WrapLine    = Class.new(OutputToken)
   UnwrapLine  = Class.new(OutputToken)
   Kill        = Class.new(OutputToken)
+  ClearToEndOfScreen = Class.new(OutputToken)
 end
