@@ -18,8 +18,16 @@ module RLine
         @term.apply_token @app.call(Character.new(c))
       end
 
+      should_reset = false
+      trap(:WINCH) { should_reset = true }
+
       loop do
         input_token = @term.next_token
+
+        if should_reset
+          @term.apply_token @screen.reset_columns($stdin.winsize[1])
+          should_reset = false
+        end
 
         output_token = @app.call(input_token) unless input_token.nil?
 

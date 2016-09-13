@@ -17,12 +17,12 @@ module RLine
       end
     end
 
-    def left
-      if @cursor > @left_bound
+    def left(left_bound = @left_bound)
+      if @cursor > left_bound
         @cursor -= 1
 
         if beyond_left?
-          UnwrapLine.new
+          UnwrapLine.new(@columns)
         else
           MoveLeft.new
         end
@@ -51,6 +51,28 @@ module RLine
           redraw_kill
         end
       end
+    end
+
+    def reset_columns(columns)
+      tokens = []
+
+      original_cursor = @cursor
+
+      @cursor.times { tokens << left(0) }
+
+      tokens << ClearToEndOfScreen.new
+
+      @columns = columns
+
+      @line.chars.each do |c|
+        tokens << append(c, true)
+      end
+
+      (@cursor - original_cursor).times do
+        tokens << left
+      end
+
+      tokens
     end
 
     private

@@ -107,9 +107,9 @@ class RLine::ScreenTest < TestCase
     end
 
     expected_tokens = [
-      RLine::UnwrapLine.new,
+      RLine::UnwrapLine.new(width),
       *Array.new(width - 1).map { RLine::MoveLeft.new },
-      RLine::UnwrapLine.new,
+      RLine::UnwrapLine.new(width),
       *Array.new(width - 1).map { RLine::MoveLeft.new }
     ]
 
@@ -177,7 +177,7 @@ class RLine::ScreenTest < TestCase
       RLine::Kill.new,
       RLine::MoveLeft.new,
       RLine::MoveLeft.new,
-      RLine::UnwrapLine.new,
+      RLine::UnwrapLine.new(width),
       RLine::MoveLeft.new,
       RLine::MoveLeft.new,
       RLine::MoveLeft.new,
@@ -204,5 +204,24 @@ class RLine::ScreenTest < TestCase
 
     10.times { subject.left }
     assert_equal left_bound, subject.cursor
+  end
+
+  def test_reset_columns
+    n = width * 2
+    text = 'a' * width
+    text.chars.each { |c| subject.print_char(c) }
+
+    3.times { subject.left }
+    cursor = subject.cursor
+    tokens = subject.reset_columns(n)
+
+    expected_tokens = [
+      *Array.new(subject.cursor, RLine::MoveLeft.new),
+      RLine::ClearToEndOfScreen.new,
+      *Array.new(text.length, RLine::Print.new('a')),
+      *Array.new(text.length - cursor, RLine::MoveLeft.new)
+    ]
+
+    assert_equal expected_tokens, tokens
   end
 end
