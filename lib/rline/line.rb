@@ -9,25 +9,14 @@ module RLine
     def initialize(prompt = '> ')
       @term = RLine::Terminal.new
       @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
-      @app = RLine::Application.new(@screen)
-      @prompt = prompt
+      @app = RLine::Application.new(@screen, prompt)
     end
 
     def gets
-      @prompt.chars.each do |c|
-        @term.apply_token @app.call(Character.new(c))
-      end
-
-      should_reset = false
-      trap(:WINCH) { should_reset = true }
+      @term.apply_token(@app.call(nil))
 
       loop do
         input_token = @term.next_token
-
-        if should_reset
-          @term.apply_token @screen.reset_columns($stdin.winsize[1])
-          should_reset = false
-        end
 
         output_token = @app.call(input_token) unless input_token.nil?
 
@@ -36,7 +25,7 @@ module RLine
         break if output_token.is_a?(Exit)
       end
 
-      @app.screen.line[@prompt.length..-1]
+      @app.line
     end
   end
 end
