@@ -1,5 +1,6 @@
 require 'io/console'
 require 'rline/mapping/emacs'
+require 'rline/history'
 
 module RLine
   class Application
@@ -8,7 +9,8 @@ module RLine
     def initialize(screen, prompt)
       @screen = screen
       @prompt = prompt
-      @mapping = RLine::Mapping::Emacs
+      @history = History
+      @mapping = RLine::Mapping::Emacs.new(screen, @history, prompt)
 
       @should_print_prompt = true
       @should_reset = true
@@ -19,7 +21,12 @@ module RLine
     # @return [RLine::OutputToken]
     def call(token)
       pending_tokens = pending_tokens()
-      response = @mapping.call(token, @screen)
+      response = @mapping.call(token)
+
+      case response
+      when Exit
+        @history.push(line) unless line.empty?
+      end
 
       if pending_tokens && pending_tokens.any?
         [*pending_tokens, *response]
