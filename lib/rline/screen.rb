@@ -75,6 +75,21 @@ module RLine
       tokens
     end
 
+    def kill_line
+      tokens = []
+      @cursor.times { tokens << left(0) }
+      @line.clear
+      tokens << ClearToEndOfScreen.new
+      tokens
+    end
+
+    def reset_line(new_line)
+      tokens = []
+      tokens.concat(kill_line)
+      new_line.chars { |c| tokens << print_char(c) }
+      tokens
+    end
+
     private
 
     def redraw_kill
