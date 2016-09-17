@@ -34,12 +34,12 @@ class RLine::ApplicationTest < TestCase
 
   def test_enter
     screen.expect(:line, prompt)
-    assert_equal RLine::Exit.new, call(RLine::Enter.new)
+    assert_equal RLine::Exit.new(RLine::Enter.new), call(RLine::Enter.new)
   end
 
   def test_eof
     screen.expect(:line, prompt)
-    assert_equal RLine::Exit.new, call(RLine::EOF.new)
+    assert_equal RLine::Exit.new(RLine::EOF.new), call(RLine::EOF.new)
   end
 
   def test_char

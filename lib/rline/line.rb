@@ -6,8 +6,14 @@ require 'rline/screen'
 
 module RLine
   class Line
+    class << self
+      attr_accessor :term_class
+    end
+
+    self.term_class = ::RLine::Terminal
+
     def initialize(prompt = '> ')
-      @term = RLine::Terminal.new
+      @term = self.class.term_class.new
       @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
       @app = RLine::Application.new(@screen, prompt)
     end
@@ -15,6 +21,20 @@ module RLine
     def gets
       @term.apply_token(@app.call(nil))
 
+      final_token = _gets
+
+      line = @app.line
+
+      if final_token.value.is_a?(EOF) && line.empty?
+        nil
+      else
+        line
+      end
+    end
+
+    private
+
+    def _gets
       loop do
         input_token = @term.next_token
 
@@ -22,10 +42,8 @@ module RLine
 
         @term.apply_token(output_token) unless output_token.nil?
 
-        break if output_token.is_a?(Exit)
+        break output_token if output_token.is_a?(Exit)
       end
-
-      @app.line
     end
   end
 end
