@@ -19,7 +19,7 @@ module RLine
           ]
         when Enter, EOF
           @history_shift = 0
-          Exit.new
+          Exit.new(token)
         when ArrowLeft
           @screen.left
         when ArrowRight
