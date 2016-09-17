@@ -2,7 +2,18 @@ require 'test_helper'
 
 class RLine::ApplicationTest < TestCase
   def subject
-    @subject ||= RLine::Application.new(screen)
+    @subject ||= RLine::Application.new(screen, prompt)
+  end
+
+  def prompt
+    '> '
+  end
+
+  def setup
+    screen.expect(:reset_columns, nil, [subject.class.actual_screen_width])
+    prompt.chars.each do |c|
+      screen.expect(:print_char, nil, [c])
+    end
   end
 
   def screen
@@ -22,10 +33,12 @@ class RLine::ApplicationTest < TestCase
   end
 
   def test_enter
+    screen.expect(:line, prompt)
     assert_equal RLine::Exit.new, call(RLine::Enter.new)
   end
 
   def test_eof
+    screen.expect(:line, prompt)
     assert_equal RLine::Exit.new, call(RLine::EOF.new)
   end
 

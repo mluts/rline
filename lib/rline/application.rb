@@ -6,6 +6,12 @@ module RLine
   class Application
     attr_reader :input, :screen
 
+    class << self
+      def actual_screen_width
+        $stdin.winsize[1]
+      end
+    end
+
     def initialize(screen, prompt)
       @screen = screen
       @prompt = prompt
@@ -43,7 +49,7 @@ module RLine
 
     def reset
       @should_reset = false
-      @screen.reset_columns(actual_columns)
+      @screen.reset_columns(self.class.actual_screen_width)
     end
 
     def print_prompt
@@ -56,10 +62,6 @@ module RLine
       tokens.concat(Array(reset)) if @should_reset
       tokens.concat(Array(print_prompt)) if @should_print_prompt
       tokens
-    end
-
-    def actual_columns
-      $stdin.winsize[1]
     end
   end
 end
