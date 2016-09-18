@@ -41,6 +41,8 @@ module RLine
               end
               token
             end
+          when 'a'
+            Array.new(@screen.cursor - @prompt.size).map { @screen.left }
           end
         end
       end

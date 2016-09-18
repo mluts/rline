@@ -10,4 +10,7 @@ require 'rline'
 Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 
 class TestCase < Minitest::Test
+  def ctrl_(char)
+    RLine::ControlCharacter.new((char.ord - '@'.ord).chr)
+  end
 end

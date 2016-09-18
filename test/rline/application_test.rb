@@ -20,10 +20,6 @@ class RLine::ApplicationTest < TestCase
     @screen ||= Minitest::Mock.new
   end
 
-  def ctrl_(char)
-    RLine::ControlCharacter.new((char.ord - '@'.ord).chr)
-  end
-
   def teardown
     screen.verify
   end
