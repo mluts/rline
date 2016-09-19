@@ -241,4 +241,19 @@ class RLine::ScreenTest < TestCase
     assert_equal '', subject.line
     assert_equal expected_tokens, tokens
   end
+
+  def test_reset_line_without_arguments
+    prompt = '> '
+    subject = RLine::Screen.new(width, prompt)
+
+    tokens = subject.reset_line('')
+
+    expected_tokens = [
+      RLine::ClearToEndOfScreen.new,
+      RLine::Print.new('>'),
+      RLine::Print.new(' '),
+    ]
+
+    assert_equal expected_tokens, tokens
+  end
 end

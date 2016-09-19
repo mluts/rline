@@ -87,7 +87,12 @@ module RLine
     def reset_line(new_line)
       tokens = []
       tokens.concat(kill_line)
-      new_line.chars { |c| tokens << print_char(c) }
+      [
+        *@prompt.chars,
+        *@line.chars[@prompt.size..-1].to_a
+      ].each do |c|
+        tokens << print_char(c)
+      end
       tokens
     end
 

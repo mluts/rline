@@ -25,9 +25,9 @@ module RLine
         when ArrowRight
           @screen.right
         when ArrowUp
-          @screen.reset_line(@prompt + back_in_history)
+          @screen.reset_line(back_in_history)
         when ArrowDown
-          @screen.reset_line(@prompt + forward_in_history)
+          @screen.reset_line(forward_in_history)
         when Delete
           @screen.kill
         when ControlCharacter
