@@ -12,8 +12,11 @@ module RLine
 
     self.term_class = ::RLine::Terminal
 
+    attr_reader :term
+
     def initialize(prompt = '> ')
       @term = self.class.term_class.new
+      @prompt = prompt
       @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
       @app = RLine::Application.new(@screen, prompt)
     end
@@ -23,7 +26,7 @@ module RLine
 
       final_token = _gets
 
-      line = @app.line
+      line = @screen.line[@prompt.size..-1]
 
       if final_token.value.is_a?(EOF) && line.empty?
         nil
