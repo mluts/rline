@@ -41,11 +41,11 @@ module RLine
       end
     end
 
+    private
+
     def line
       @screen.line[@prompt.size..-1]
     end
-
-    private
 
     def reset
       @should_reset = false
