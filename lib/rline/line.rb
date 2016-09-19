@@ -17,7 +17,7 @@ module RLine
     def initialize(prompt = '> ')
       @term = self.class.term_class.new
       @prompt = prompt
-      @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
+      @screen = RLine::Screen.new($stdin.winsize[1], prompt)
       @app = RLine::Application.new(@screen, prompt)
     end
 

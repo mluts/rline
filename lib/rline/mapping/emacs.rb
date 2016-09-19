@@ -1,10 +1,9 @@
 module RLine
   module Mapping
     class Emacs
-      def initialize(screen, history, prompt)
+      def initialize(screen, history)
         @screen = screen
         @history = history
-        @prompt = prompt
         @history_shift = 0
       end
 

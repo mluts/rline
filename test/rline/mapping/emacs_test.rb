@@ -2,7 +2,7 @@ require 'test_helper'
 
 class RLine::Mapping::EmacsTest < TestCase
   def subject
-    @subject ||= RLine::Mapping::Emacs.new(screen, history, prompt)
+    @subject ||= RLine::Mapping::Emacs.new(screen, history)
   end
 
   def history

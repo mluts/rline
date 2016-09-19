@@ -16,7 +16,7 @@ module RLine
       @screen = screen
       @prompt = prompt
       @history = History
-      @mapping = RLine::Mapping::Emacs.new(screen, @history, prompt)
+      @mapping = RLine::Mapping::Emacs.new(screen, @history)
 
       @should_print_prompt = true
       @should_reset = true
