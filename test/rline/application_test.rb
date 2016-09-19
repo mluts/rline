@@ -16,4 +16,19 @@ class RLine::ApplicationTest < TestCase
   def teardown
     screen.verify
   end
+
+  def test_resets_line_first_time
+    line = 'abcd'
+
+    tokens = Array.new(3).map { RLine::Print.new(random_char) }
+    token = RLine::Print.new(random_char)
+
+    screen.expect(:line, prompt + line)
+    screen.expect(:reset_line, tokens, ['abcd'])
+
+    expected_tokens = [*tokens, token]
+
+    assert_equal expected_tokens, subject.call(token)
+    assert_equal token, subject.call(token)
+  end
 end

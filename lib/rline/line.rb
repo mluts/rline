@@ -3,6 +3,7 @@ require 'rline/input_token'
 require 'rline/output_token'
 require 'rline/terminal'
 require 'rline/screen'
+require 'rline/middleware'
 
 module RLine
   class Line
@@ -18,7 +19,10 @@ module RLine
       @term = self.class.term_class.new
       @prompt = prompt
       @screen = RLine::Screen.new($stdin.winsize[1], prompt)
-      @app = RLine::Application.new(@screen, prompt)
+      @app = RLine::Middleware.new(
+        RLine::Mapping::Emacs.new(@screen, RLine::History),
+        RLine::Application.new(@screen, prompt)
+      )
     end
 
     def gets
