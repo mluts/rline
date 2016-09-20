@@ -1,6 +1,6 @@
 module RLine
   class Screen
-    attr_reader :line, :cursor
+    attr_reader :line, :cursor, :columns
 
     def initialize(columns, prompt = '')
       @line = ''
@@ -84,7 +84,7 @@ module RLine
       tokens
     end
 
-    def reset_line(new_line)
+    def reset_line(new_line = line_without_prompt)
       tokens = []
       tokens.concat(kill_line)
       [
