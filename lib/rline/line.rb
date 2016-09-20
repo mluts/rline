@@ -3,6 +3,7 @@ require 'rline/input_token'
 require 'rline/output_token'
 require 'rline/terminal'
 require 'rline/screen'
+require 'rline/middleware'
 
 module RLine
   class Line
@@ -12,10 +13,16 @@ module RLine
 
     self.term_class = ::RLine::Terminal
 
+    attr_reader :term
+
     def initialize(prompt = '> ')
       @term = self.class.term_class.new
-      @screen = RLine::Screen.new($stdin.winsize[1], prompt.length)
-      @app = RLine::Application.new(@screen, prompt)
+      @prompt = prompt
+      @screen = RLine::Screen.new($stdin.winsize[1], prompt)
+      @app = RLine::Middleware.new(
+        RLine::Mapping::Emacs.new(@screen, RLine::History),
+        RLine::Application.new(@screen, prompt)
+      )
     end
 
     def gets
@@ -23,7 +30,7 @@ module RLine
 
       final_token = _gets
 
-      line = @app.line
+      line = @screen.line[@prompt.size..-1]
 
       if final_token.value.is_a?(EOF) && line.empty?
         nil

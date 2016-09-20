@@ -187,9 +187,9 @@ class RLine::ScreenTest < TestCase
     assert_equal expected_tokens, tokens
   end
 
-  def test_left_bound
-    left_bound = 2
-    subject = RLine::Screen.new(width, left_bound)
+  def test_prompt
+    prompt = '> '
+    subject = RLine::Screen.new(width, prompt)
 
     assert_equal 0, subject.cursor
 
@@ -203,7 +203,7 @@ class RLine::ScreenTest < TestCase
     assert_equal 3, subject.cursor
 
     10.times { subject.left }
-    assert_equal left_bound, subject.cursor
+    assert_equal prompt.size, subject.cursor
   end
 
   def test_reset_columns
@@ -239,6 +239,21 @@ class RLine::ScreenTest < TestCase
 
     assert_equal 0, subject.cursor
     assert_equal '', subject.line
+    assert_equal expected_tokens, tokens
+  end
+
+  def test_reset_line_without_arguments
+    prompt = '> '
+    subject = RLine::Screen.new(width, prompt)
+
+    tokens = subject.reset_line('')
+
+    expected_tokens = [
+      RLine::ClearToEndOfScreen.new,
+      RLine::Print.new('>'),
+      RLine::Print.new(' '),
+    ]
+
     assert_equal expected_tokens, tokens
   end
 end

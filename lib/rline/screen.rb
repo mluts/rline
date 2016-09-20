@@ -2,11 +2,12 @@ module RLine
   class Screen
     attr_reader :line, :cursor
 
-    def initialize(columns, left_bound = 0)
+    def initialize(columns, prompt = '')
       @line = ''
       @cursor = 0
       @columns = columns
-      @left_bound = left_bound
+      @prompt = prompt
+      @left_bound = prompt.size
     end
 
     def print_char(char)
@@ -86,7 +87,12 @@ module RLine
     def reset_line(new_line)
       tokens = []
       tokens.concat(kill_line)
-      new_line.chars { |c| tokens << print_char(c) }
+      [
+        *@prompt.chars,
+        *@line.chars[@prompt.size..-1].to_a
+      ].each do |c|
+        tokens << print_char(c)
+      end
       tokens
     end
 

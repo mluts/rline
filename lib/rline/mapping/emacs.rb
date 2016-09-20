@@ -1,10 +1,9 @@
 module RLine
   module Mapping
     class Emacs
-      def initialize(screen, history, prompt)
+      def initialize(screen, history)
         @screen = screen
         @history = history
-        @prompt = prompt
         @history_shift = 0
       end
 
@@ -25,9 +24,9 @@ module RLine
         when ArrowRight
           @screen.right
         when ArrowUp
-          @screen.reset_line(@prompt + back_in_history)
+          @screen.reset_line(back_in_history)
         when ArrowDown
-          @screen.reset_line(@prompt + forward_in_history)
+          @screen.reset_line(forward_in_history)
         when Delete
           @screen.kill
         when ControlCharacter

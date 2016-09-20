@@ -10,6 +10,13 @@ require 'rline'
 Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 
 class TestCase < Minitest::Test
+  def ctrl_(char)
+    RLine::ControlCharacter.new((char.ord - '@'.ord).chr)
+  end
+
+  def random_char
+    ('a'..'z').to_a.sample
+  end
 end
 
 Dir[File.expand_path('../support/*.rb', __FILE__)].each { |f| require(f) }

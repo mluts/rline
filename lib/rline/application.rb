@@ -16,36 +16,32 @@ module RLine
       @screen = screen
       @prompt = prompt
       @history = History
-      @mapping = RLine::Mapping::Emacs.new(screen, @history, prompt)
 
       @should_print_prompt = true
-      @should_reset = true
+      @should_reset = false
       trap(:SIGWINCH) { @should_reset = true }
     end
 
-    # @param token [RLine::InputToken]
-    # @return [RLine::OutputToken]
     def call(token)
-      pending_tokens = pending_tokens()
-      response = @mapping.call(token)
+      tokens = pending_tokens
 
-      case response
+      case token
       when Exit
         @history.push(line) unless line.empty?
       end
 
-      if pending_tokens && pending_tokens.any?
-        [*pending_tokens, *response]
+      if tokens.any?
+        [*tokens, *token]
       else
-        response
+        token
       end
     end
+
+    private
 
     def line
       @screen.line[@prompt.size..-1]
     end
-
-    private
 
     def reset
       @should_reset = false
@@ -54,7 +50,7 @@ module RLine
 
     def print_prompt
       @should_print_prompt = false
-      @prompt.chars.map { |c| @screen.print_char(c) }
+      @screen.reset_line(line)
     end
 
     def pending_tokens
