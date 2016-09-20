@@ -89,11 +89,15 @@ module RLine
       tokens.concat(kill_line)
       [
         *@prompt.chars,
-        *@line.chars[@prompt.size..-1].to_a
+        *new_line.to_s.chars
       ].each do |c|
         tokens << print_char(c)
       end
       tokens
+    end
+
+    def line_without_prompt
+      @line[@prompt.size..-1].to_s
     end
 
     private

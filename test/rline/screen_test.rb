@@ -256,4 +256,14 @@ class RLine::ScreenTest < TestCase
 
     assert_equal expected_tokens, tokens
   end
+
+  def test_line
+    prompt = '> '
+    text = 'abcdefg'
+
+    subject = RLine::Screen.new(width, prompt)
+    subject.reset_line(text)
+
+    assert_equal text, subject.line_without_prompt
+  end
 end

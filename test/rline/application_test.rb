@@ -23,7 +23,7 @@ class RLine::ApplicationTest < TestCase
     tokens = Array.new(3).map { RLine::Print.new(random_char) }
     token = RLine::Print.new(random_char)
 
-    screen.expect(:line, prompt + line)
+    screen.expect(:line_without_prompt, line)
     screen.expect(:reset_line, tokens, ['abcd'])
 
     expected_tokens = [*tokens, token]

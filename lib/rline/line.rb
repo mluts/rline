@@ -30,7 +30,7 @@ module RLine
 
       final_token = _gets
 
-      line = @screen.line[@prompt.size..-1]
+      line = @screen.line_without_prompt
 
       if final_token.value.is_a?(EOF) && line.empty?
         nil

@@ -40,7 +40,7 @@ module RLine
     private
 
     def line
-      @screen.line[@prompt.size..-1]
+      @screen.line_without_prompt
     end
 
     def reset
