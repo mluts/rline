@@ -25,4 +25,5 @@ module RLine
     end
   end
   Delete = Class.new(InputToken)
+  Tab    = Class.new(InputToken)
 end

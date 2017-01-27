@@ -9,6 +9,7 @@ module RLine
     ENTER     = "\r"
     EOT       = "\u0004"
     ESCAPE    = "\e"
+    TAB       = "\t"
     CONTROL_CHARACTER = "\u0000".."\u001F"
 
     def initialize(io = $stdin)
@@ -25,6 +26,8 @@ module RLine
       case char
       when BACKSPACE
         Backspace.new(char)
+      when TAB
+        Tab.new(char)
       when ENTER
         Enter.new(char)
       when EOT

@@ -6,6 +6,8 @@ module RLine
   class Application
     attr_reader :input, :screen
 
+    attr_accessor :should_print_prompt, :should_reset
+
     class << self
       def actual_screen_width
         $stdin.winsize[1]

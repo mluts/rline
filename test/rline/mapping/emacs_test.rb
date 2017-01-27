@@ -111,4 +111,14 @@ class RLine::Mapping::EmacsTest < TestCase
 
     assert_equal [result1, result2], subject.call(RLine::Backspace.new)
   end
+
+  def test_call_with_output_token
+    token = RLine::OutputToken.new
+    assert_equal token, subject.call(token)
+  end
+
+  def test_call_with_array
+    token = [1,2,3]
+    assert_equal token, subject.call(token)
+  end
 end

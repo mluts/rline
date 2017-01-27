@@ -4,6 +4,7 @@ require 'rline/output_token'
 require 'rline/terminal'
 require 'rline/screen'
 require 'rline/middleware'
+require 'rline/completion'
 
 module RLine
   class Line
@@ -15,11 +16,12 @@ module RLine
 
     attr_reader :term
 
-    def initialize(prompt = '> ')
+    def initialize(prompt = '> ', completion_proc: proc{[]})
       @term = self.class.term_class.new
       @prompt = prompt
       @screen = RLine::Screen.new($stdin.winsize[1], prompt)
       @app = RLine::Middleware.new(
+        RLine::Completion.new(@screen, completion_proc),
         RLine::Mapping::Emacs.new(@screen, RLine::History),
         RLine::Application.new(@screen, prompt)
       )

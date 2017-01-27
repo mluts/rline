@@ -41,6 +41,8 @@ module RLine
               token
             end
           end
+        when Array, OutputToken
+          token
         end
       end
 

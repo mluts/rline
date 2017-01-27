@@ -47,4 +47,9 @@ class RLine::StandardInputTest < TestCase
     io.buf.replace "\u0015".chars
     assert_equal RLine::ControlCharacter.new("\u0015"), subject.next
   end
+
+  def test_tab
+    io.buf.replace "\t".chars
+    assert_equal RLine::Tab.new("\t"), subject.next
+  end
 end

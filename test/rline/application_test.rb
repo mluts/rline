@@ -31,4 +31,18 @@ class RLine::ApplicationTest < TestCase
     assert_equal expected_tokens, subject.call(token)
     assert_equal token, subject.call(token)
   end
+
+  def test_output_token
+    subject.should_print_prompt = false
+    token = RLine::OutputToken.new(rand)
+
+    assert_equal token, subject.call(token)
+  end
+
+  def test_array
+    subject.should_print_prompt = false
+    token = [1,2,3]
+
+    assert_equal token, subject.call(token)
+  end
 end

@@ -3,7 +3,7 @@ require 'rline/line'
 module RLine
   module_function
 
-  def gets(prompt = '> ')
-    Line.new(prompt).gets
+  def gets(*args)
+    Line.new(*args).gets
   end
 end
